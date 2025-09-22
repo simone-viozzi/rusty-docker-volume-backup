@@ -46,12 +46,24 @@ pkgs.mkShell {
     zlib
     zlib.out
     patchelf
-    maturin
+    wget
+
+    # Docker + Compose + rootless bits
+    docker               # cli + dockerd + dockerd-rootless.sh
+    docker-compose       # v2 "docker compose"
+    rootlesskit
+    slirp4netns
+    fuse-overlayfs
+    iptables
+    curl
   ];
 
   pre-commit = pkgs.pre-commit;
 
-  postShellHook = ''
+  # Start a private rootless dockerd when the shell opens; kill it on exit.
+  shellHook = ''
+    set -euo pipefail
+
     export RUST_BACKTRACE=1
     export CARGO_HOME=$HOME/.cargo
     export PATH=$CARGO_HOME/bin:$PATH
@@ -62,13 +74,12 @@ pkgs.mkShell {
     export NIX_LD_LIBRARY_PATH
     export LD_LIBRARY_PATH=${pkgs.zlib}/lib:$LD_LIBRARY_PATH
 
-    pip install --upgrade wheel setuptools
-    export PKG_CONFIG_PATH="${pkgs.openssl.dev}/lib/pkgconfig:$PKG_CONFIG_PATH"
+    export PKG_CONFIG_PATH="${pkgs.openssl.dev}/lib/pkgconfig:${"PKG_CONFIG_PATH:-"}"
 
     export LLDB_DEBUGSERVER_PATH="${pkgs.lldb.out}/bin/lldb-server"
 
     # Create a local directory for LLDB symlinks
-    LLDB_BIN_DIR="./lldb-bin"
+    LLDB_BIN_DIR="./.direnv/lldb-bin"
     mkdir -p "$LLDB_BIN_DIR"
 
     # Symlink liblldb.so from the lldb.lib output to the local directory
@@ -77,16 +88,15 @@ pkgs.mkShell {
     # Symlink lldb-server from the lldb.out output to the local directory
     ln -sf "${pkgs.lldb.out}/bin/lldb-server" "$LLDB_BIN_DIR/lldb-server"
 
-    echo "Created local LLDB bin directory at $(pwd)/lldb-bin"
-    echo "Set VSCode 'lldb.library' to $(pwd)/lldb-bin/liblldb.so"
+    echo "Created local LLDB bin directory at $(pwd)/.direnv/lldb-bin"
+    echo "Set VSCode 'lldb.library' to $(pwd)/.direnv/lldb-bin/liblldb.so"
 
     # Patch the codelldb adapter executable with the correct dynamic linker.
-    if [ -f "$HOME/.vscode/extensions/vadimcn.vscode-lldb-1.11.4/adapter/codelldb" ]; then
+    if [ -f "$HOME/.vscode/extensions/vadimcn.vscode-lldb-1.11.5/adapter/codelldb" ]; then
       echo "Patching codelldb adapter..."
-      patchelf --set-interpreter "$NIX_LD" "$HOME/.vscode/extensions/vadimcn.vscode-lldb-1.11.4/adapter/codelldb"
+      patchelf --set-interpreter "$NIX_LD" "$HOME/.vscode/extensions/vadimcn.vscode-lldb-1.11.5/adapter/codelldb"
     else
-      echo "codelldb adapter not found, skipping patch."
+      exit 1
     fi
-
   '';
 }

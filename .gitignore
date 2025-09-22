@@ -24,7 +24,8 @@ Cargo.lock
 
 ### direnv ###
 .direnv
-.envrc
+# since we inizialize docker rootless here we want to keep the .envrc file
+!.envrc 
 
 # End of https://www.toptal.com/developers/gitignore/api/direnv
 

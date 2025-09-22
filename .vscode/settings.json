@@ -1,20 +1,23 @@
 {
     "lldb.verboseLogging": true,
     "rust-analyzer.debug.engine": "vadimcn.vscode-lldb",
-    "lldb.library": "/home/simone/workspace/pre-commit-todo/lldb-bin/liblldb.so",
+    "lldb.library": "/home/simone/workspace/rusty-docker-volume-backup/.direnv/lldb-bin/liblldb.so",
     "lldb.launch.env": {
-        "LLDB_DEBUGSERVER_PATH": "/home/simone/workspace/pre-commit-todo/lldb-bin/lldb-server"
+        "LLDB_DEBUGSERVER_PATH": "/home/simone/workspace/rusty-docker-volume-backup/.direnv/lldb-bin/lldb-server"
     },
     "rust-analyzer.debug.engineSettings": {
         "env": {
-            "LLDB_DEBUGSERVER_PATH": "/home/simone/workspace/pre-commit-todo/lldb-bin/lldb-server"
+            "LLDB_DEBUGSERVER_PATH": "/home/simone/workspace/rusty-docker-volume-backup/.direnv/lldb-bin/lldb-server"
         },
         "adapterEnv": {
-            "LLDB_DEBUGSERVER_PATH": "/home/simone/workspace/pre-commit-todo/lldb-bin/lldb-server"
+            "LLDB_DEBUGSERVER_PATH": "/home/simone/workspace/rusty-docker-volume-backup/.direnv/lldb-bin/lldb-server"
         }
     },
     "lldb.adapterEnv": {
-        "LLDB_DEBUGSERVER_PATH": "/home/simone/workspace/pre-commit-todo/lldb-bin/lldb-server"
+        "LLDB_DEBUGSERVER_PATH": "/home/simone/workspace/rusty-docker-volume-backup/.direnv/lldb-bin/lldb-server"
+    },
+    "containers.environment": {
+        "DOCKER_HOST": "unix:///home/simone/workspace/rusty-docker-volume-backup/.direnv/.devdocker/docker.sock"
     },
     "[github-actions-workflow]": {
         "editor.defaultFormatter": "redhat.vscode-yaml"
