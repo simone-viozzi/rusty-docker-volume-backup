@@ -1,0 +1,32 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: end-of-file-fixer
+  - repo: local
+    hooks:
+      - id: rustfmt
+        name: Rustfmt
+        entry: cargo fmt --all
+        language: system
+        pass_filenames: false
+        types: [rust]
+  - repo: local
+    hooks:
+      - id: clippy
+        name: Clippy
+        entry: cargo clippy --all-targets --all-features -- -D warnings
+        language: system
+        pass_filenames: false
+        types: [rust]
+  - repo: https://github.com/simone-viozzi/rusty-todo-md-pre-commit.git
+    rev: v1.9.1
+    hooks:
+      - id: rusty-todo-md
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-added-large-files
