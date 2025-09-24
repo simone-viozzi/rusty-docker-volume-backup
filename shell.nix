@@ -56,6 +56,7 @@ pkgs.mkShell {
     fuse-overlayfs
     iptables
     curl
+    colima
   ];
 
   pre-commit = pkgs.pre-commit;
