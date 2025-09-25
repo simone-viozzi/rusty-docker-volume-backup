@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup Rust
+      uses: dtolnay/rust-toolchain@stable
+    - name: Cache dependencies
+      uses: Swatinem/rust-cache@v2
+    - name: Check formatting
+      run: cargo fmt --check
+    - name: Run clippy
+      run: cargo clippy -- -D warnings
+    - name: Run security audit
+      uses: rustsec/audit-check@v1.4.1
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Build
+      run: cargo build
+    - name: Run tests
+      run: cargo test
