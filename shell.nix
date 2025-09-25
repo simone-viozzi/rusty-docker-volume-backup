@@ -47,6 +47,7 @@ pkgs.mkShell {
     zlib.out
     patchelf
     wget
+    uv
 
     # Docker + Compose + rootless bits
     docker               # cli + dockerd + dockerd-rootless.sh
@@ -60,6 +61,7 @@ pkgs.mkShell {
   ];
 
   pre-commit = pkgs.pre-commit;
+  uv = pkgs.uv;
 
   # Start a private rootless dockerd when the shell opens; kill it on exit.
   shellHook = ''
